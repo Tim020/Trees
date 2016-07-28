@@ -1,4 +1,4 @@
-package com.tjb.binarytrees;
+package com.tjb.trees.binary;
 
 /**
  * Created by Tim on 28/07/2016.

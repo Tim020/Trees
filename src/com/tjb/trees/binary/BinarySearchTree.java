@@ -1,4 +1,4 @@
-package com.tjb.binarytrees;
+package com.tjb.trees.binary;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 /**
  * Created by Tim on 28/07/2016.
  */
-public class BinarySearchTree<V> implements Iterable<Node<V>> {
+public class BinarySearchTree<V> implements IBinaryTree<V> {
 
     private Node<V> root;
 
@@ -36,12 +36,18 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
         this.root = new Node(weight, data);
     }
 
+    @Override
+    public Node getRootNode() {
+        return root;
+    }
+
     /**
      * Inserts a new node into the tree
      *
      * @param weight The weight for the new node
      * @param data   The contents of the new node
      */
+    @Override
     public void insert(int weight, V data) {
         if (this.root == null) {
             this.root = new Node(weight, data);
@@ -73,7 +79,8 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
      * @param weight The weight of the node to search for
      * @return The node with the given weight or null
      */
-    public Node search(int weight) {
+    @Override
+    public Node<V> search(int weight) {
         if (this.root == null) {
             return null;
         } else {
@@ -103,6 +110,7 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
     /**
      * @return Checks that the invariant of this Binary Search Tree holds true
      */
+    @Override
     public boolean isValidTree() {
         return isValidTreeRecursive(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
@@ -128,6 +136,7 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
     /**
      * @return The node with the minimum weight
      */
+    @Override
     public Node<V> getMin() {
         Node currentNode = root;
         while (currentNode.getLeftChild() != null) {
@@ -139,6 +148,7 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
     /**
      * @return The node with the maximum weight
      */
+    @Override
     public Node<V> getMax() {
         Node currentNode = root;
         while (currentNode.getRightChild() != null) {
@@ -150,6 +160,7 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
     /**
      * @return The maximum depth of the tree
      */
+    @Override
     public int getHeight() {
         if (root == null) {
             return 0;
@@ -176,6 +187,7 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
      *
      * @param weight The node weight to remove
      */
+    @Override
     public void remove(int weight) {
         removeRecursive(this, weight);
     }
@@ -231,6 +243,7 @@ public class BinarySearchTree<V> implements Iterable<Node<V>> {
      *
      * @return A list of all nodes ordered by weight
      */
+    @Override
     public ArrayList<Node<V>> traverseToList() {
         ArrayList<Node<V>> nodes = new ArrayList<>();
         traverseToListRecursive(nodes, root);

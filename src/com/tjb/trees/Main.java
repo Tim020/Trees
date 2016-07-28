@@ -1,7 +1,11 @@
-package com.tjb.binarytrees;
+package com.tjb.trees;
+
+import com.tjb.trees.binary.BinarySearchTree;
+import com.tjb.trees.binary.Node;
 
 /**
  * Created by Tim on 28/07/2016.
+ * Testing class
  */
 public class Main {
 
