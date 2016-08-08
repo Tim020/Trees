@@ -3,17 +3,17 @@ package com.tjb.trees.binary;
 /**
  * Created by Tim on 28/07/2016.
  */
-public class Node<V> {
+public class SimpleNode<V> implements INode<V> {
 
-    private Node<V> leftChild;
-    private Node<V> rightChild;
-    private Node<V> parent;
+    private SimpleNode<V> leftChild;
+    private SimpleNode<V> rightChild;
+    private SimpleNode<V> parent;
 
     private int weight;
 
     private V data;
 
-    public Node(int weight, V data) {
+    public SimpleNode(int weight, V data) {
         this.leftChild = null;
         this.rightChild = null;
         this.parent = null;
@@ -21,7 +21,7 @@ public class Node<V> {
         this.data = data;
     }
 
-    public Node(int weight, V data, Node<V> parent) {
+    public SimpleNode(int weight, V data, SimpleNode<V> parent) {
         this.leftChild = null;
         this.rightChild = null;
         this.parent = parent;
@@ -29,15 +29,15 @@ public class Node<V> {
         this.data = data;
     }
 
-    public Node getLeftChild() {
+    public SimpleNode getLeftChild() {
         return leftChild;
     }
 
-    public Node getRightChild() {
+    public SimpleNode getRightChild() {
         return rightChild;
     }
 
-    public Node getParent() {
+    public SimpleNode getParent() {
         return parent;
     }
 
@@ -53,15 +53,21 @@ public class Node<V> {
         this.weight = weight;
     }
 
-    public void setLeftChild(Node<V> leftChild) {
+    public void setLeftChild(SimpleNode<V> leftChild) {
         this.leftChild = leftChild;
+        if (leftChild != null) {
+            leftChild.parent = this;
+        }
     }
 
-    public void setRightChild(Node<V> rightChild) {
+    public void setRightChild(SimpleNode<V> rightChild) {
         this.rightChild = rightChild;
+        if (rightChild != null) {
+            rightChild.parent = this;
+        }
     }
 
-    public void setParent(Node<V> parent) {
+    public void setParent(SimpleNode<V> parent) {
         this.parent = parent;
     }
 
@@ -71,8 +77,8 @@ public class Node<V> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Node) {
-            return ((Node) obj).getWeight() == this.weight && ((Node) obj).getParent() == this.parent;
+        if (obj instanceof SimpleNode) {
+            return ((SimpleNode) obj).getWeight() == this.weight && ((SimpleNode) obj).getParent() == this.parent;
         }
         return false;
     }

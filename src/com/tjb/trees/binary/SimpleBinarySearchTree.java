@@ -6,14 +6,14 @@ import java.util.Iterator;
 /**
  * Created by Tim on 28/07/2016.
  */
-public class BinarySearchTree<V> implements IBinaryTree<V> {
+public class SimpleBinarySearchTree<V> implements IBinaryTree<V> {
 
-    private Node<V> root;
+    protected SimpleNode<V> root;
 
     /**
      * Creates an empty Binary Search Tree
      */
-    public BinarySearchTree() {
+    public SimpleBinarySearchTree() {
         this.root = null;
     }
 
@@ -22,7 +22,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      *
      * @param root The root node of the new tree
      */
-    public BinarySearchTree(Node<V> root) {
+    public SimpleBinarySearchTree(SimpleNode<V> root) {
         this.root = root;
     }
 
@@ -32,12 +32,15 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param weight The weight of the root node
      * @param data   The contents of the root node
      */
-    public BinarySearchTree(int weight, V data) {
-        this.root = new Node(weight, data);
+    public SimpleBinarySearchTree(int weight, V data) {
+        this.root = new SimpleNode(weight, data);
     }
 
+    /**
+     * @return The root node of the tree
+     */
     @Override
-    public Node getRootNode() {
+    public SimpleNode getRootNode() {
         return root;
     }
 
@@ -48,25 +51,32 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param data   The contents of the new node
      */
     @Override
-    public void insert(int weight, V data) {
+    public boolean insert(int weight, V data) {
         if (this.root == null) {
-            this.root = new Node(weight, data);
+            SimpleNode n = new SimpleNode(weight, data);
+            this.root = n;
+            return true;
         } else {
-            Node current = root;
-            Node parent;
+            SimpleNode current = root;
+            SimpleNode parent;
             while (true) {
+                if (weight == current.getWeight()) {
+                    return false;
+                }
                 parent = current;
                 if (weight < current.getWeight()) {
                     current = current.getLeftChild();
                     if (current == null) {
-                        parent.setLeftChild(new Node(weight, data, parent));
-                        break;
+                        SimpleNode n = new SimpleNode(weight, data, parent);
+                        parent.setLeftChild(n);
+                        return true;
                     }
                 } else {
                     current = current.getRightChild();
                     if (current == null) {
-                        parent.setRightChild(new Node(weight, data, parent));
-                        break;
+                        SimpleNode n = new SimpleNode(weight, data, parent);
+                        parent.setRightChild(n);
+                        return true;
                     }
                 }
             }
@@ -80,7 +90,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @return The node with the given weight or null
      */
     @Override
-    public Node<V> search(int weight) {
+    public SimpleNode<V> search(int weight) {
         if (this.root == null) {
             return null;
         } else {
@@ -95,7 +105,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param weight The weight to check for
      * @return The node with the given weight or null
      */
-    private Node searchRecursive(Node<V> root, int weight) {
+    private SimpleNode<V> searchRecursive(SimpleNode<V> root, int weight) {
         if (root == null) {
             return null;
         } else if (root.getWeight() == weight) {
@@ -123,7 +133,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param maxWeight Maximum weight allowed past this point
      * @return Whether the tree is valid or not
      */
-    private boolean isValidTreeRecursive(Node<V> node, int minWeight, int maxWeight) {
+    private boolean isValidTreeRecursive(SimpleNode<V> node, int minWeight, int maxWeight) {
         if (node == null) {
             return true;
         } else if (node.getWeight() < minWeight || node.getWeight() > maxWeight) {
@@ -137,8 +147,8 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @return The node with the minimum weight
      */
     @Override
-    public Node<V> getMin() {
-        Node currentNode = root;
+    public SimpleNode<V> getMin() {
+        SimpleNode currentNode = root;
         while (currentNode.getLeftChild() != null) {
             currentNode = currentNode.getLeftChild();
         }
@@ -149,8 +159,8 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @return The node with the maximum weight
      */
     @Override
-    public Node<V> getMax() {
-        Node currentNode = root;
+    public SimpleNode<V> getMax() {
+        SimpleNode currentNode = root;
         while (currentNode.getRightChild() != null) {
             currentNode = currentNode.getRightChild();
         }
@@ -163,7 +173,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
     @Override
     public int getHeight() {
         if (root == null) {
-            return 0;
+            return -1;
         }
         return getHeightRecursive(root);
     }
@@ -175,9 +185,9 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param node The current node
      * @return The height of the tree
      */
-    private int getHeightRecursive(Node<V> node) {
+    protected int getHeightRecursive(SimpleNode<V> node) {
         if (node == null) {
-            return 0;
+            return -1;
         }
         return Math.max(getHeightRecursive(node.getLeftChild()), getHeightRecursive(node.getRightChild())) + 1;
     }
@@ -198,14 +208,14 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param tree   The subtree being searched through
      * @param weight The weight of the node to remove
      */
-    private void removeRecursive(BinarySearchTree tree, int weight) {
+    private void removeRecursive(SimpleBinarySearchTree tree, int weight) {
         if (weight < tree.root.getWeight()) {
-            removeRecursive(new BinarySearchTree(tree.root.getLeftChild()), weight);
+            removeRecursive(new SimpleBinarySearchTree(tree.root.getLeftChild()), weight);
         } else if (weight > tree.root.getWeight()) {
-            removeRecursive(new BinarySearchTree(tree.root.getRightChild()), weight);
+            removeRecursive(new SimpleBinarySearchTree(tree.root.getRightChild()), weight);
         } else {
             if (tree.root.getLeftChild() != null && tree.root.getRightChild() != null) {
-                BinarySearchTree successor = new BinarySearchTree(tree.root.getRightChild());
+                SimpleBinarySearchTree successor = new SimpleBinarySearchTree(tree.root.getRightChild());
                 tree.root.setWeight(successor.getMin().getWeight());
                 tree.root.setData(successor.getMin().getData());
                 successor.remove(successor.root.getWeight());
@@ -225,7 +235,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param parent The original node
      * @param child  The new child node
      */
-    private void replaceNodeInParent(Node<V> parent, Node<V> child) {
+    private void replaceNodeInParent(SimpleNode<V> parent, SimpleNode<V> child) {
         if (parent.getParent() != null) {
             if (parent == parent.getParent().getLeftChild()) {
                 parent.getParent().setLeftChild(child);
@@ -238,14 +248,28 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
         }
     }
 
+    public ArrayList<SimpleNode<V>> getPreOrder() {
+        ArrayList<SimpleNode<V>> nodeList = new ArrayList<>();
+        getPreOrderRecursive(root, nodeList);
+        return nodeList;
+    }
+
+    private void getPreOrderRecursive(SimpleNode<V> node, ArrayList<SimpleNode<V>> list) {
+        if (node != null) {
+            list.add(node);
+            getPreOrderRecursive(node.getLeftChild(), list);
+            getPreOrderRecursive(node.getRightChild(), list);
+        }
+    }
+
     /**
      * Traverses the tree in order of weight
      *
      * @return A list of all nodes ordered by weight
      */
     @Override
-    public ArrayList<Node<V>> traverseToList() {
-        ArrayList<Node<V>> nodes = new ArrayList<>();
+    public ArrayList<INode<V>> traverseToList() {
+        ArrayList<INode<V>> nodes = new ArrayList<>();
         traverseToListRecursive(nodes, root);
         return nodes;
     }
@@ -256,7 +280,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @param nodes The list of nodes
      * @param node  The starting point of the recursive call
      */
-    private void traverseToListRecursive(ArrayList<Node<V>> nodes, Node node) {
+    private void traverseToListRecursive(ArrayList<INode<V>> nodes, SimpleNode node) {
         if (node == null) {
             return;
         }
@@ -269,7 +293,7 @@ public class BinarySearchTree<V> implements IBinaryTree<V> {
      * @return The iterator of all nodes in weight order
      */
     @Override
-    public Iterator<Node<V>> iterator() {
+    public Iterator<INode<V>> iterator() {
         return traverseToList().iterator();
     }
 }

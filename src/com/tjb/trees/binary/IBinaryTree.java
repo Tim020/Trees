@@ -5,24 +5,24 @@ import java.util.ArrayList;
 /**
  * Created by Tim on 28/07/2016.
  */
-public interface IBinaryTree<V> extends Iterable<Node<V>>{
+public interface IBinaryTree<V> extends Iterable<INode<V>> {
 
-    Node<V> getRootNode();
+    INode<V> getRootNode();
 
-    void insert(int weight, V data);
+    boolean insert(int key, V data);
 
-    Node<V> search(int weight);
+    INode<V> search(int key);
 
     boolean isValidTree();
 
-    Node<V> getMin();
+    INode<V> getMin();
 
-    Node<V> getMax();
+    INode<V> getMax();
 
     int getHeight();
 
-    void remove(int weight);
+    void remove(int key);
 
-    ArrayList<Node<V>> traverseToList();
+    ArrayList<INode<V>> traverseToList();
 
 }
